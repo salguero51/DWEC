@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+    //Funcion contructora grupo
+    
+    function Grupo(descripcion,nAlumnos){
+        this.descripcion = descripcion;
+        this.nAlumnos = nAlumnos;
+    }
+
+    // METODOS 
+
+    //function 
+
+    //Funcion contructora instituto
+
+    function Instituto(codigo, nombre, grupos){
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.grupos = grupos;
+
+        //this.cuantosGrupos = function(){return this.grupos.length;} 
+    }
+    //Añado metodo
+    Instituto.prototype.cuantosGrupos = function(){return this.grupos.length;}
+
+    var daw2 = new Grupo("DAW2", 15);
+    var asir2 = new Grupo("ASIR2", 20)
+
+    var miInstituto = new Instituto("11007922", "IES Romero Vargas", [daw2,asir2])
+
+    console.log(`El instiuto ${miInstituto.nombre} tiene ${miInstituto.cuantosGrupos()} grupos`);
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

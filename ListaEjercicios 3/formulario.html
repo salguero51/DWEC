@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Formulario</title>
+    <script>
+        var checkcheckbox = function(cb){
+        document.getElementById("submit").disabled = !cb.checked;
+        }
+        var Validar = function(){
+        enviar = true;
+
+        var nombre = document.getElementById("nombre").value;
+        if (!/\S/.test(nombre)){
+            salida += "El nombre no puede contener espacios"
+            enviar = false
+        }
+        var email = document.getElementById("email").value;
+        if (!/^\S*@\S*\.\w*$/.test(email)){
+            salida += "El email no es valido"
+
+        }
+
+
+
+
+
+
+
+        document.getElementById("salida").innerHTML = salida;
+        return enviar;
+    }
+
+    </script>
+</head>
+<body>
+    <h1></h1>
+    <form action="#" method="GET" onsubmit="Validar()">
+        <p>Nombre: <input type="text" name="nombre"></p>
+        <p>Email: <input type="email" name="email" id="email"></p>
+        <p>Contraseña: <input type="password" name="pass1" id="pass1"></p>
+        <p>Contraseña: <input type="password" name="pass2" id="pass2"></p>
+        <p><span id="cap">X + X = </span><input type="number" name="suma" id="suma"></p>
+        <p>Acepto los términos y condiciones del <a href="#">NDSFS-451</a>
+        <input type="checkbox" name="acp" id="acp" onclick="checkcheckbox(this)"></p>
+        <input type="submit" value="Crear Cuenta" name="submit" id="submit" disabled>
+    </form>
+</body>
+</html>

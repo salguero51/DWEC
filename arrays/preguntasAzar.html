@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Preguntas</title>
+    <script>
+    var preguntas = [
+        {
+            pregunta: "¿De dónde es Randall Munroe?",
+            respuestas: ["Reino Unido", "Estados Unidos", "Rusia"],
+            correcta: 1
+        },
+        {
+            pregunta: "¿Cómo se llama el web-cómic de Randall Munroe?",
+            respuestas: ["ckxd", "cdxk", "xkcd"],
+            correcta: 2
+        },
+        {
+            pregunta: "¿Cómo se llama el último libro de Randall Munroe?",
+            respuestas: ["El explicador de cosas", "Como hacer cosas", "Cosas Explicadas"],
+            correcta: 0
+        },
+    ]
+    console.log(preguntas);
+    
+    preguntas.sort(function(){
+        return 0.5 - Math.random();
+    });
+
+    console.log(preguntas);
+    
+    var Siguiente = function(boton){
+        if (preguntas.length > 0){
+            document.getElementById("pregunta").innerHTML = preguntas.pop();
+        }
+        else
+        {
+            boton.disabled = true;
+        }
+
+    };
+
+
+    window.onload = function(){
+        var test = "";
+        preguntas.forEach(function(elemento, indice){
+            test += `<p>${indice+1}. ${elemento.pregunta}</p>`;
+
+            elemento.respuestas.forEach(function(respuesta, indice2){
+                var valor = elemento.correcta == indice2?"y":"n";
+                test += `<input type="radio" name="${indice}" value="${valor}"> ${respuesta}</input>`;
+            })
+        });
+
+        document.getElementById("test").innerHTML = test;
+
+    }
+
+    var Corregir = function(){
+        var aciertos = 0;
+        var fallos = 0;
+        var inputs = document.getElementsByTagName("input")
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].checked){
+                if (inputs[i].value == "y"){
+                    aciertos++;
+                } else {
+                    fallos++;
+                }
+            }
+        }
+        console.log(aciertos + " " + fallos)
+
+    }
+    </script>
+</head>
+<body>
+    <!-- <button onclick="Siguiente(this)">Siguiente pregunta</button>
+    <p id="pregunta"></p>-->
+
+        <h1>
+            Mini-test
+        </h1>
+        <div id="test">
+
+
+        </div>
+        <button onclick="Corregir()">Corregir</button>
+</body>
+</html>

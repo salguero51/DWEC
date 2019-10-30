@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tiempo</title>
+    <script>
+    window.onload = function(){
+        setInterval(function(){
+            console.log("hola")
+            var fecha = new Date();
+            var min = toString(fecha.getMinutes);
+            var minutos = ""; 
+            console.log(min);
+            if (fecha.getMinutes < 10){
+                minutos = "0"+min;
+            } else {
+                minutos = min
+            }
+        
+            document.getElementById("reloj").innerHTML = `${fecha.getHours()}:${minutos}:${fecha.getSeconds()}`
+        }, 1000);
+
+    };
+    </script>
+</head>
+<body>
+
+    <h1 id="reloj"></h1>
+    
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Formulario Generico</title>
+    <script>
+    var controlarboton = function(cb){
+        document.getElementById("submit").disabled = !cb.checked;
+    }
+    var Validar = function(){
+        enviar = true;
+
+        var campo1 = document.getElementById("campo1").value;
+        if (!/\S/.test(campo1)){
+            salida += "El campo1 no es correcto"
+            enviar = false
+        }
+        
+        document.getElementById("salida").innerHTML = salida;
+        return enviar;
+    }
+    </script>
+</head>
+<body>
+    <h1>Formulario</h1>
+    <form action="#" method="GET" onsubmit="Validar()">
+        <p>Campo de texto <input type="text" name="campo1" id="campo1"></p>
+        <p>Checkbox <input type="checkbox" name="cb" id="cb" onclick="controlarboton(this)"></p>
+        <p>
+            Si <input type="radio" name="radio" id="" value="true">
+            No <input type="radio" name="radio" id="" value="false">
+        </p>
+        <p><input type="submit" value="Enviar" id="submit" disabled></p>
+    </form>
+    <p id="salida"></p>
+</body>
+</html>
