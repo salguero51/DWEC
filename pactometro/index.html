@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        var partidos = [
+        {
+            "partido" : "PSOE",
+            "escanios" : 120,
+            "votos" : 6752983,
+            "porcentaje" : 28,
+            "color" : "#ed1c24"
+        },
+        {
+            "partido" : "PP",
+            "escanios" : 88,
+            "votos" : 5019869,
+            "porcentaje" : 20.82,
+            "color" : "#0055a7"
+        },
+        {
+            "partido" : "Cs",
+            "escanios" : 10,
+            "votos" : 1637540,
+            "porcentaje" : 6.79,
+            "color" : "#fa5000"
+        },
+        {
+            "partido" : "PODEMOS-IU",
+            "escanios" : 35,
+            "votos" : 3097185,
+            "porcentaje" : 12.84,
+            "color" : "#6a2e68"
+        },
+        {
+            "partido" : "VOX",
+            "escanios" : 52,
+            "votos" : 3640063,
+            "porcentaje" : 15.09,
+            "color" : "#66bc29"
+        },
+        {
+            "partido" : "ERC-SOBIRANISTES",
+            "escanios" : 13,
+            "votos" : 869934,
+            "porcentaje" : 3.61,
+            "color" : "#f3b217"
+        },
+        {
+            "partido" : "JxCAT-JUNTS",
+            "escanios" : 8,
+            "votos" : 527375,
+            "porcentaje" : 2.19,
+            "color" : "#c40048"
+        },
+        {
+            "partido" : "PNV",
+            "escanios" : 7,
+            "votos" : 377423,
+            "porcentaje" : 1.57,
+            "color" : "#009526"
+        },
+        {
+            "partido" : "EH Bildu",
+            "escanios" : 5,
+            "votos" : 276519,
+            "porcentaje" : 1.15,
+            "color" : "#92aa34"
+        },
+        {
+            "partido" : "CUP-PR",
+            "escanios" : 2,
+            "votos" : 244754,
+            "porcentaje" : 1.01,
+            "color" : "#fff200"
+        },
+        {
+            "partido" : "MÁS PAÍS",
+            "escanios" : 3,
+            "votos" : 554066,
+            "porcentaje" : 2.3,
+            "color" : "#0fddc4"
+        },
+        {
+            "partido" : "NA+",
+            "escanios" : 2,
+            "votos" : 98448,
+            "porcentaje" : 0.41,
+            "color" : "#e51c13"
+        },
+        {
+            "partido" : "CCa-PNC-NC",
+            "escanios" : 2,
+            "votos" : 123981,
+            "porcentaje" : 0.51,
+            "color" : "#ffda1a"
+        },
+        {
+            "partido" : "BNG",
+            "escanios" : 1,
+            "votos" : 119597,
+            "porcentaje" : 0.5,
+            "color" : "#76aad0"
+        },
+        {
+            "partido" : "PRC",
+            "escanios" : 1,
+            "votos" : 68580,
+            "porcentaje" : 0.28,
+            "color" : "#00c6a4"
+        },
+        {
+            "partido" : "¡TERUEL EXISTE!",
+            "escanios" : 1,
+            "votos" : 19696,
+            "porcentaje" : 0.08,
+            "color" : "#037252"
+        }
+        ]
+        var desc = partidos.sort((a, b) => Number(b.escanios) - Number(a.escanios));
+    </script>
+        <style>
+            .container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                margin: auto 100px ;
+            }
+            table *{
+                padding: 5px;
+                border: 1px dotted black;
+                text-align: right;
+            }
+            .partido {
+                text-align: left;
+            }
+            .parla {
+                border: 1px dotted gray;
+                height: 50px;
+                width: 700px;
+            }
+            .parla div{
+                display:inline-block;
+            }
+            #total {
+                height: 20px;
+            }
+            .testsssss *{
+                width: 50%;
+                border: 2px solid red;
+            }
+        </style>
+        <script>
+        function cambiar(partido, total) {
+            esto = document.getElementById(partido);
+            potal = document.getElementById("total");
+
+            potal = document.getElementById("total");
+
+            if (potal.html){
+                total = potal.innerHTML;
+            } else {
+                total = 0;
+            }
+            
+
+            if (esto.style.display == "none"){
+                esto.style.display = "inline-block";
+                total += i;
+            }else{
+                esto.style.display = "none"
+                total -= i;
+            }
+            potal.innterHTML = total;
+        }
+        </script>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1>Resultados</h1>
+            <table id="tabla">
+                <script>
+                    var tablac = "";
+                    for (i = 0 ; i < desc.length; i++) {
+                        tablac += `
+                        <tr>
+                            <td class="check"><input type="checkbox" name="${desc[i].partido}-c" id="${desc[i].partido}-c" onclick='cambiar("${desc[i].partido}","${desc[i].escanios}")'></td>
+                            <td class="partido" style="background-color:${desc[i].color};">${desc[i].partido}</td>
+                            <td class="escanios">${desc[i].escanios}</td>
+                            <td class="votos">${desc[i].votos}</td>
+                            <td class="porcentaje">${desc[i].porcentaje}</td>
+                        </tr>             
+                        `;
+                    }
+                    document.getElementById("tabla").innerHTML = tablac;
+                </script>
+            </table>
+        </div>
+        <div>
+            <h1>Pactómetro</h1>
+            <p>Total escaños: <span id="total"></span></p>
+            <div class="parla" id="parla">
+               <script>
+                   var pactometro = "";
+                for (i = 0 ; i < desc.length; i++) {
+                    pactometro += `<div id="${desc[i].partido}" style="background-color: ${desc[i].color}; width: ${desc[i].escanios*2}px; display: none; height: 100%;"></div>`;
+                }
+                document.getElementById("parla").innerHTML = pactometro;  
+                </script>
+            <!--<div style="border-right: 2px dotted black; height: 100%; width: 50%;"></div>-->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
