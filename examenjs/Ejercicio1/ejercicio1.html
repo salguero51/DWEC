@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 1</title>
+    <script src="provincias.js"></script>
+    <script>
+    // Carga el array de provincias
+    provincias = JSON.parse(provincias);
+    
+    // Genera las opciones al cargar la pagina
+    window.onload = function(){
+        var propciones = document.getElementById("propciones");
+        provincias.forEach(function(valor, indice){
+            propciones.innerHTML +=
+            `<option name="propciones" value="${valor})">${valor}</option>`;
+        });
+        anio();
+    };      
+    var fecha = new Date();
+    // Genera las opciones del año
+    function anio(actual = fecha.getFullYear()) {
+        anio = document.getElementById("anio")
+
+        anio.innerHTML = "";
+        for (let i = actual; i >= 1970 ; i--) {
+            anio.innerHTML += `<option value="${i})">${i}</option>`;
+        }
+        mes(actual)
+    }
+    // Genera las opciones del mes
+    function mes(actual = fecha.getMonth, anio = fecha.getFullYear) {
+        mes = document.getElementById("mes")
+        meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+        switch (fecha.getMonth) {
+            case 3,5,8,10:
+            totaldias = 30;
+            break;
+            case 2:
+                if(anio % 4 == 0) {
+                console.log("bisiesto");
+                totaldias = 29;
+                } else {
+                console.log("no bisiesto");
+                totaldias = 28;
+                }
+            break;                  
+            default:
+            totaldias = 31;
+                break;
+        }
+        mes.innerHTML = "";
+        for (let i = 0; i <= 11 ; i++) {
+            mes.innerHTML += `<option value="${i+1}">${meses[i]}</option>`;
+        }
+        dia(totaldias);
+    }
+    // Genera las opciones del dia
+    function dia(actual = 31) {
+        dia = document.getElementById("dia")
+        dia.innerHTML = "";
+        for (let i = 1; i <= actual; i++) {
+            dia.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+    }
+
+
+
+    var validarFormulario = function(){
+        correcto = true;
+        errores = "";
+        
+        var email = document.getElementById("email").value;
+        if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email)){
+            errores += "El email no es válido<br>"
+            correcto = false
+        }
+
+        var passwd = document.getElementById("passwd").value;
+        if (!/^(?=.*\d)(?=.*[_])(?=.*[A-Z])[A-Z]{1}[0-9a-zA-Z]{4,11}$/.test(passwd)){
+            errores += 
+            "La contraseña no es válida: Debe tener entre 5 y 12 caracteres, empezar por una letra mayuscula y tener al menos un digito y una barra baja<br>"
+            correcto = false
+        }
+            document.getElementsByName
+        var propciones = document.getElementById("propciones").value;
+        if (propciones){
+            errores += 
+            "Debe elegir una provincia<br>"
+            correcto = false
+        }
+        
+        document.getElementById("errores").innerHTML = errores;
+        return correcto;
+    }
+
+
+
+    // Activa/Desactiva el submit segun el checkbox
+    var aceptacondiciones = function(condiciones){
+        document.getElementById("submit").disabled = !condiciones.checked;
+    }
+    </script>
+</head>
+<body>
+    <h1>Registro de usuario</h1>
+    <p id="errores" style="color: red;"></p>
+    <form action="graba_registro.php" method="POST" onsubmit="validarFormulario()">
+        <p>Correo electrónico: <input type="email" name="email" id="email"></p>
+        <p>Contraseña: <input type="password" name="passwd" id="passwd"></p>
+        <p>Provincia: <select name="propciones" id="propciones">
+            <option name="propciones" value="null">-- Elegir provincia --</option>
+        </select></p>
+        <p>Fecha de nacimiento: 
+            Dia: <select name="dia" id="dia" onclick=""></select>
+            Mes: <select name="mes" id="mes" onclick=""></select>
+            Año: <select name="anio" id="anio" onclick=""></select>
+        </p>
+        <p><input type="checkbox" name="condiciones" id="condiciones" onclick="aceptacondiciones(this)"> Acepto las condiciones de uso.</p>
+        <input type="submit" value="submit" id="submit" onclick="provincias()" disabled>
+    </form>
+    <button onclick="validarFormulario()"></button>
+</body>
+</html>

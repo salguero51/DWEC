@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        // función que rota el carácter
+    var rotar = function(caracter, rot) {
+        if ((caracter+rot)<78){return caracter+rot;}
+
+        if ((caracter+rot)>=78){
+            if ((caracter+rot)<=90){return caracter+rot+1}
+            
+        }
+
+
+
+
+
+        if ((caracter > 78) && (caracter < 200)) {caracter += rot;}
+        if (caracter <= 78) {
+            caracter += rot;
+            if (caracter)
+        }
+        if (caracter >= 90) {caracter -= 90+rot;}
+        if (caracter >= 210) {caracter = 78+rot;}
+        return caracter;
+    }
+
+    //función que toma el texto del textbox, aplica la rotación y muestra el texto final en un párrafo
+    var descifrar = function(){
+        cadena = document.getElementById("text").value;
+        rot = document.getElementById("rot").value;
+        maxalfa = document.getElementById("alfa").value;
+
+
+        var salida = "";
+        for (let i = 0; i < cadena.length; i++) {
+            var caracter = cadena.charCodeAt(i);
+            console.log(maxalfa)
+            console.log(caracter + " " +rot);
+            switch (maxalfa) {
+                // si el alfabeto es castellano
+                case "esp":
+                    
+                    console.log(rotar(caracter,rot))
+                    salida += String.fromCharCode(rotar(caracter,rot));
+                    break;
+                
+                // otros alfabetos
+                default:
+                    break;
+            }
+            
+
+
+
+
+
+        
+        }
+        console.log("salida = "+salida);
+        document.getElementById("descifrado").innerHTML = salida;
+    }
+
+    // función que aplica un máximo de rotación según el alfabeto
+    var maximo = function(alfabeto){
+        rot = document.getElementById("rot");
+        switch (alfabeto) {
+            case "esp":
+                rot.max = 26;
+                break;
+        
+            default:
+                rot.max = 25;
+                break;
+        }        
+    }
+    </script>
+</head>
+<body>
+    <h1>Cifrado César</h1>
+    <h2>- Descifrar -</h2>
+    <p>Alfabeto <select onchange="maximo(this.value)" name="alfa" id="alfa">
+        <option value="esp">Castellano</option>
+        <option value="ing">Inglés</option>
+    </select></p>
+    <p>Texto a descrifrar:</p>
+    <textarea name="text" id="text" cols="100" rows="5" value="Tan facil"></textarea>
+    <p>Nivel de rotado <input type="number" name="rot" id="rot" min="0"></p>
+    <button onclick="descifrar()">Descifrar</button>
+    <p id="descifrado"></p>
+</body>
+</html>
