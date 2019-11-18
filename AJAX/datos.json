@@ -1,0 +1,14 @@
+[
+    {
+        "idioma": "Castellano",
+        "alfabeto": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+    },
+    {
+        "idioma": "Inglés",
+        "alfabeto": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    },
+    {
+        "idioma": "Francés",
+        "alfabeto": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    }
+]

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Prueba Ajax 4</title>
+    <script>
+        let oa = new XMLHttpRequest()
+        oa.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                let documentoXML = this.responseXML;
+                let titulos = documentoXML.getElementsByTagName("TITLE");
+                for (let i = 0; i < titulos.length; i++) {
+                    console.log(titulos[i].firstChild.nodeValue);
+                    document.getElementById("lista").innerHTML +=
+                    `<li>${titulos[i].firstChild.nodeValue}</li>`
+                }
+            }
+        }
+        oa.open("GET","cd_catalog.xml", true);
+        oa.send();
+    
+    </script>
+</head>
+<body>
+    <ul id="lista"></ul>
+</body>
+</html>

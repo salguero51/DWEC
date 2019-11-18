@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Prueba Ajax II</title>
+    <script>
+        var updateIdiomas = function(idiomas){
+            for (let i = 0; i < idiomas.length; i++) {
+                document.getElementById("idioma").innerHTML +=
+                `<option value="${i}">${idiomas[i].idioma}</option>`     
+            }
+        }
+        window.addEventListener("load",function(){
+            // Peticion
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(this.status == 200 && this.readyState == 4){
+                    let idiomas = JSON.parse(this.responseText);
+                    console.log(idiomas);
+                    updateIdiomas(idiomas);                    
+                }
+            }
+            xhr.open("GET","datos.json",true)
+            xhr.send();
+        });
+    </script>
+</head>
+<body>
+    <select id="idioma">
+
+    </select>
+</body>
+</html>

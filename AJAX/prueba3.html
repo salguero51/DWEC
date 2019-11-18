@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Prueba Ajax 3</title>
+    <script>
+        let CargaPHP = () => {
+
+            let x = new XMLHttpRequest();
+            x.onreadystatechange = () => {
+                if (x.readyState == 4 && x.status == 200){
+                    document.getElementById("salida").innerHTML = x.responseText;
+                }
+            }
+            x.open("GET","datos.php",true);
+            x.send();
+        }
+    </script>
+</head>
+<body>
+    <button onclick="CargaPHP()">Imprimir Fecha</button><br>
+    <div id="salida"></div>
+</body>
+</html>
