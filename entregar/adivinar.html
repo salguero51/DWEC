@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Adivinar</title>
+    <style>
+        body {
+            background: rgba(0,0,0,1);
+        }
+        #casillero {
+            display: grid;
+            grid-template-columns: repeat(10, max-content);
+            grid-template-rows: repeat(10, max-content);
+        }
+
+        .bt {
+            border: 1px dotted gray;
+            margin: 5px;
+            padding: 10px;
+            text-align: right;
+            background: rgba(64,64,64,1);
+            color: white;
+        }
+
+        .bt:disabled {
+            background-color: lightcoral;
+            border-color: red;
+            color: white;
+        }
+    </style>
+    <script>
+
+
+        window.onload = function () {
+            for (let i = 1; i <= 100; i++) {
+                document.getElementById("casillero").innerHTML +=
+                    `<button id="${i}" class="bt" onclick="comprobarBoton(${i})">${i}</button>`
+            }
+        }
+        generarNumero = function () {
+            let numero = Math.round(Math.random() * 100);
+            console.log("-- Número: " + numero)
+            return numero;
+        }
+        disableBox = function (start, end) {
+            for (let i = start; i <= end; i++) {
+                box = document.getElementById(i);
+                box.disabled = true;
+            }
+        }
+
+        comprobarBoton = function (id) {
+            if (id == numero) {
+                document.getElementById(numero).style.backgroundColor = "lightgreen";
+            } else {
+                if (id < numero) {
+                    disableBox(1, id)
+                }
+                if (id > numero) {
+                    disableBox(id, 100)
+                }
+            }
+        }
+
+        var numero = generarNumero();
+
+    </script>
+
+</head>
+
+<body>
+    <div id="casillero"></div>
+</body>
+
+</html>
