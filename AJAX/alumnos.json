@@ -1,0 +1,22 @@
+[
+    {
+        "nombre" : "Carlos", 
+        "apellidos":"Ortega",
+        "nacimiento" : "1990-02-28",
+        "notas" : [
+            {"modulo" : "FOL", "convalida" : true },
+            {"modulo" : "SIS", "convalida" : false , "nota" : 5},
+            {"modulo" : "DAW", "convalida" : false , "nota" : 5}
+        ]
+    }, 
+    {
+        "nombre" : "Ana", 
+        "apellidos": "Martín",
+        "nacimiento" : "1997-02-14",
+        "notas" : [
+            {"modulo" : "FOL", "convalida" : true },
+            {"modulo" : "SIS", "convalida" : false , "nota" : 8},
+            {"modulo" : "DAW", "convalida" : false , "nota" : 7}
+        ]
+    }
+]

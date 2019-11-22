@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Alumnos</title>
+    <!-- Solicitar mediante AJAX el archivo alumnos.json y presentar un listado
+    de alumnos indicando nombres, dia de la semana en que nació y nota media,
+    teniendo en cuenta que si el modulo esta convalidado, la nota usada para 
+    la media sería un 5. El listado debe estar ordenado descendiente por nota media -->
+    <style>
+        table *{
+            border: 1px dotted gray;
+            padding: 10px;
+            }
+    </style>
+    <script>
+        window.addEventListener("load", function(){
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200) {
+                    let alumnos = JSON.parse(this.responseText);
+                    Tratar(alumnos);
+                    Ordenar(alumnos);
+                    Presentar(alumnos);
+                }
+            }
+            xhr.open("GET","alumnos.json",true)
+            xhr.send();
+        })
+
+        function Tratar(alumnos){
+            for (let i = 0; i < alumnos.length; i++) {
+                let media = 0;
+                for (j = 0; j < alumnos[i].notas.length; j++) {
+                    if (alumnos[i].notas[j].convalida) {
+                        media += 5; 
+                    }else{
+                        media += alumnos[i].notas[j].nota;
+                    }
+                    alumnos[i].notaMedia = Number((media / alumnos[i].notas.length).toFixed(2));
+                    // Convierto la fecha a date
+                    alumnos[i].nacimiento = new Date(alumnos[i].nacimiento);
+                }
+            }
+        console.log(alumnos)
+        }
+
+        function Ordenar(alumnos){
+            alumnos.sort(function(a,b){
+                if (a.notaMedia > b.notaMedia) return -1;
+                if (a.notaMedia < b.notaMedia) return 1;
+                return 0;
+            })
+        }
+        
+        function Presentar(alumnos) {
+            for (let i = 0; i < alumnos.length; i++) {
+                document.getElementById("tabla").innerHTML +=
+                    `
+                    <tr>
+                        <td>${alumnos[i].nombre}</td>
+                        <td>${alumnos[i].apellidos}</td>
+                        <td>${alumnos[i].nacimiento.getDay()}</td>
+                        <td>${alumnos[i].notaMedia}</td>
+                    </tr>
+                    `
+            }
+        }
+    </script>
+</head>
+<body>
+    <table id="tabla"></table>
+</body>
+</html>
