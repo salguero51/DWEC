@@ -5,17 +5,99 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>Cronómetro</title>
+		<style>
+		body {
+			background-color: rgba(0, 0, 0, 0.9);
+			color: white;
+		}
+		.contenedor {
+			display: grid;
+						
+		}
+		</style>
 		<script>
-			var init = function(){
+			var temporizador;
+			var tiempoInicio, tiempoPausa;
+			var elTemporizador;
+			window.onload = function() {
+				elTemporizador = document.getElementById("temporizador");
+			};
+
+			Number.prototype.pad = function (size) {
+				var s = String(this);
+				while (s.length < (size || 2)) { s = "0" + s; }
+				return s;
+			};
+
+			var reloj = function() {
+				var tiempo = new Date() - (tiempoInicio || new Date());
+				document.getElementById("milisegundos").innerHTML = Math.floor(tiempo % 1000 / 10).pad(2);
+				tiempo = Math.floor(tiempo / 1000);
+				document.getElementById("segundos").innerHTML = (tiempo % 60).pad(2);
+				tiempo = Math.floor(tiempo / 60);
+				document.getElementById("minutos").innerHTML = tiempo.pad(2);
+			};
+
+			var init = function() {
+				if (tiempoPausa) {
+					tiempoInicio = new Date() - (tiempoPausa - tiempoInicio);
+				} else {
+					tiempoInicio = new Date();
+				}
+				tiempoPausa = null;
+
+				temporizador = setInterval(reloj, 10);
+
+				updateButtons();
+			};
+
+			var pause = function() {
+				tiempoPausa = new Date();
+
+				clearInterval(temporizador);
+				temporizador = null;
+				reloj();
+
+				updateButtons();
+			};
+
+			var stop = function(){}
+
+			var updateButtons = function() {
+				document.getElementById("button-start").disabled = !(!tiempoInicio) && !tiempoPausa;
+				document.getElementById("button-pause").disabled = !tiempoInicio;
+				// document.getElementById("button-reset").disabled = ;
+				document.getElementById("button-stop").disabled = !(!tiempoPausa);
+			};
+
+			var reset = function() {
+				if (temporizador) {
+					tiempoInicio = new Date();
+				} else {
+					tiempoInicio = null;
+				}
+				tiempoPausa = null;
 				
-			}
+				reloj();
+
+				updateButtons();
+			};
 		</script>
 	</head>
 
 	<body>
-		<h1>00:00:00</h1>
-		<input type="button" value="Start" onclick="init()" />
-		<input type="button" value="Reset" onclick="reset()" />
-		<input type="button" value="Stop" onclick="stop()" />
+		<div id="contenedor"></div>
+		<h1 id="temporizador">
+			<span id="minutos">00</span>
+			:
+			<span id="segundos">00</span>
+			:
+			<span id="milisegundos">00</span>
+			
+		</h1>
+		<input id="button-start" type="button" value="Start" onclick="init()" />
+		<input id="button-pause" type="button" value="Pause" onclick="pause()" />
+		<input id="button-reset" type="button" value="Reset" onclick="reset()" />
+		<input id="button-stop" type="button" value="Stop" onclick="stop()" />
 	</body>
 </html>

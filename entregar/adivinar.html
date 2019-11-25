@@ -9,6 +9,12 @@
     <style>
         body {
             background: rgba(0,0,0,1);
+            color: white;
+            display: grid;
+            grid-template-columns: 1fr auto auto 1fr;
+        }
+        body *{
+            border: 1px dotted red;
         }
         #casillero {
             display: grid;
@@ -17,12 +23,15 @@
         }
 
         .bt {
+            font-size: 1.5em;
             border: 1px dotted gray;
             margin: 5px;
             padding: 10px;
-            text-align: right;
+            text-align: center;
             background: rgba(64,64,64,1);
             color: white;
+            height: 60px;
+            width: 60px;
         }
 
         .bt:disabled {
@@ -72,7 +81,11 @@
 </head>
 
 <body>
+    
     <div id="casillero"></div>
+    <div class="resultados">
+        <h1>Test</h1>
+    </div>
 </body>
 
 </html>
