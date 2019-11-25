@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 6 Ajax Post</title>
+    <script>
+        var Enviar = () => {
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", () => {
+                console.log(xhr.responseText)
+            });
+            xhr.open("POST","ejercicio6.php");
+            let formulario = document.getElementById("form");
+
+            xhr.send(new FormData(formulario));
+        }
+    </script>
+</head>
+<body>
+    <form id="form" action="#" onsubmit="return false">
+        <p>Nombre <input type="text" name="nombre"></p>
+        <p>Contraseña <input type="password" name="password"></p>
+        <button id="enviar" onclick="Enviar()">Enviar</button>
+    </form>
+</body>
+</html>

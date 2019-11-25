@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Eventos</title>
+    <script>
+        document.addEventListener("DOMContentLoaded",()=>{
+            document.getElementById("boton").addEventListener("click",(evento)=>{
+                console.log(evento);
+            });
+            document.getElementById("cadena").addEventListener("keypress",(evento)=>{
+                if (evento.keyCode < 97 || evento.keyCode > 122) {
+                    evento.preventDefault();
+                    
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+    <button id="boton">Soy un botón</button>
+    <input type="text" id="cadena">
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 7 Ajax Post</title>
+    <style>
+        #subida {
+            height: 15px;
+            width: 500px;
+            border: 1px dotted green;
+        }
+        #porcentaje {
+            display: block;
+            height: 15px;
+            width: 0%;
+            background-color: lawngreen;
+        }
+    </style>
+    <script>
+        var Enviar = () => {
+            var xhr = new XMLHttpRequest();
+            xhr.upload.addEventListener("progress", (evento => {
+                document.getElementById("porcentaje").style.width = (evento.loaded/evento.total*100)+'%';
+                console.log(evento.loaded/evento.total*100);
+            }));
+            xhr.addEventListener("load", () => {
+                console.log(xhr.responseText)
+            });
+            xhr.open("POST","ejercicio7.php");
+            let formulario = document.getElementById("form");
+
+            xhr.send(new FormData(formulario));
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <form id="form" action="#" onsubmit="return false">
+            <p>Nombre <input type="text" name="nombre"></p>
+            <p>Contraseña <input type="password" name="password"></p>
+            <p><input type="file" name="foto" id="foto"></p>
+            <button id="enviar" onclick="Enviar()">Enviar</button>
+        </form>
+    </div>
+    <br>
+    <div id="subida">
+        <span id="porcentaje"></span>
+    </div>
+</body>
+</html>

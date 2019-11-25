@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 5 Ajax Post</title>
+    <script>
+        var Enviar = () => {
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", () => {
+                console.log(xhr.responseText)
+            });
+            xhr.open("POST","ejercicio5.php");
+            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+            xhr.send("nombre="+document.getElementById("nombre").value+
+                    "&pass="+document.getElementById("password").value);
+        }
+    </script>
+</head>
+<body>
+    <p>Nombre <input type="text" id="nombre"></p>
+    <p>Contraseña <input type="password" id="password"></p>
+    <button id="enviar" onclick="Enviar()">Enviar</button>
+</body>
+</html>

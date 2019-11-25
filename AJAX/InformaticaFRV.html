@@ -6,43 +6,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>InformaticaFRV</title>
-</head>
-<script>
-    function Presentar(datos){
-        tabla = "<thead><td>Grupo</td><td>Profesores</td></thead>";
-        for (let i = 0; i < datos.grupos.length; i++) {
-            profesores = "";
-            for (let j = 0; j < datos.grupos[i].profesores.length; j++) {
-                profesores += datos.grupos[i].profesores[j];
-                if (j < datos.grupos[i].profesores.length) {
-                    profesores += ", "
+    <style>
+        * {
+            font-size: 1.05em;
+        }
+
+        table * {
+            margin: 5px;
+            padding: 5px;
+            border: 1px dotted gray;
+        }
+    </style>
+
+    <script>
+        // Función que devuelve el número de grupos en los cuales un profesor imparte clase.
+        function GruposDeProfesor(nombreprofesor, grupos) {
+            var totalgrupos = 0;
+            grupos.forEach(grupo => {
+                grupo.profesores.forEach(profesor => {
+                    if (profesor == nombreprofesor) totalgrupos++;
+                });
+            });
+            return totalgrupos;
+        }
+        // Función que devuelve el número de alumnos que hay en el instituto
+        function TotalAlumnosInstituto(instituto){
+            var totalalumnos = 0;
+            instituto.grupos.forEach(grupo => {
+                totalalumnos += grupo.alumnos
+            });
+            return totalalumnos;
+        } 
+        // Función que devuelve el html de presentación de la página
+        //      Util para mostrar varios grupos en una misma pagina
+        function Presentar(datos) {
+            // Datos del insituto
+            intro = `<p>${datos.nombre}, ${datos.codigo}</p>`;
+
+            // Cabecera de la tabla grupos y profesores
+            tabla = "<table><thead><td>Grupo</td><td>Profesores</td></thead>";
+            for (let i = 0; i < datos.grupos.length; i++) {
+                profesores = "";
+                for (let j = 0; j < datos.grupos[i].profesores.length; j++) {
+                    profesores += datos.grupos[i].profesores[j];
+                    if (j < datos.grupos[i].profesores.length) {
+                        profesores += ", "
+                    }
                 }
-            }
-            tabla += `            
+                // Cada tupla de cada grupo
+                tabla += `            
             <tr>
-                <td>${datos.grupos.nombre}</td>
+                <td>${datos.grupos[i].nombre}</td>
                 <td>${profesores}</td>
             </tr>
             `
-        }
-        return `<p>${datos.nombre}, ${datos.codigo}</p>`+tabla+``;
-    }
-    window.onload = function () {
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (this.status == 200 && this.readyState == 4) {
-                let datos = JSON.parse(this.responseText)
-                document.getElementById("container").innerHTML = Presentar(datos);
             }
+            tabla += "</table>";
+
+            // Total alumnos en el instituto 
+            alumnos = `<p>Total Alumnos: ${TotalAlumnosInstituto(datos)}`
+
+            // Total grupos que en los que Juana imparte clases
+            gruposjuana = `<p>Total grupos que imparte Juana: ${GruposDeProfesor("Juana", datos.grupos)}`;
+
+            // Devuelve todo el html
+            return intro + alumnos + tabla + gruposjuana;
         }
-        xhr.open("GET", "InformaticaFRV.json", true)
-        xhr.send();
-    }
-</script>
+        // Función al cargar la página, obtiene el json y presenta los datos
+        window.onload = function () {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.status == 200 && this.readyState == 4) {
+                    let datos = JSON.parse(this.responseText)
+                    document.getElementById("container").innerHTML = Presentar(datos);
+                }
+            }
+            xhr.open("GET", "InformaticaFRV.json", true)
+            xhr.send();
+        }
+    </script>
+</head>
 
 <body>
-<div id="container">
-    
-</div>
+    <div id="container">
+
+    </div>
 </body>
+
 </html>
