@@ -5,26 +5,29 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>Cronómetro</title>
-		<style>
-		body {
-			background-color: rgba(0, 0, 0, 0.9);
-			color: white;
-		}
-		.contenedor {
-			display: grid;
-						
-		}
-		</style>
+		<link rel="stylesheet" href="cronometro.css">
 		<script>
 			var temporizador;
-			var tiempoInicio, tiempoPausa;
-
+			var tiempoInicio, tiempoPausa, tiempoVuelta;
+			var vueltas;
+			
+			// Función para mostrar ceros a la izquierda
 			Number.prototype.pad = function (size) {
 				var s = String(this);
 				while (s.length < (size || 2)) { s = "0" + s; }
 				return s;
 			};
-
+			
+			// Función que presenta la información del tiempo en formato xx:xx:xx
+			var mostrarTiempo = function(tiempo) {
+				milisegundos = Math.floor(tiempo % 1000 / 10).pad(2);
+				tiempo = Math.floor(tiempo / 1000);
+				segundos = (tiempo % 60).pad(2);
+				tiempo = Math.floor(tiempo / 60);
+				minutos = tiempo.pad(2);
+				return minutos+":"+segundos+":"+milisegundos;
+			}
+			// Función que presenta la información del tiempo en pantalla inicial
 			var reloj = function() {
 				var tiempo = new Date() - (tiempoInicio || new Date());
 				document.getElementById("milisegundos").innerHTML = Math.floor(tiempo % 1000 / 10).pad(2);
@@ -34,6 +37,7 @@
 				document.getElementById("minutos").innerHTML = tiempo.pad(2);
 			};
 
+			// Función para iniciar el crónometro
 			var init = function() {
 				if (tiempoPausa) {
 					tiempoInicio = new Date() - (tiempoPausa - tiempoInicio);
@@ -47,7 +51,8 @@
 				updateButtons();
 			};
 
-			var pause = function() {
+			// Función para pausar el cronómetro
+			var stop = function() {
 				tiempoPausa = new Date();
 
 				clearInterval(temporizador);
@@ -57,15 +62,18 @@
 				updateButtons();
 			};
 
-			var stop = function(){}
-
+			// Función que actualiza el estado de los botones Start-Stop y Vuelta-Reset
 			var updateButtons = function() {
-				document.getElementById("button-start").disabled = !(!tiempoInicio) && !tiempoPausa;
-				document.getElementById("button-pause").disabled = !tiempoInicio;
-				// document.getElementById("button-reset").disabled = ;
-				document.getElementById("button-stop").disabled = !(!tiempoPausa);
+				var buttonStart = document.getElementById("button-start");
+				var buttonStop = document.getElementById("button-stop");
+				var buttonLap = document.getElementById("button-lap");
+				var buttonReset = document.getElementById("button-reset");
+
+				buttonStart.style.display = buttonReset.style.display = (!(!tiempoInicio) && !tiempoPausa) ? "none" : "block" ;
+				buttonStop.style.display = buttonLap.style.display = (!(!tiempoInicio) && !tiempoPausa) ? "block" : "none" ;
 			};
 
+			// Función que resetea el cronómetro
 			var reset = function() {
 				if (temporizador) {
 					tiempoInicio = new Date();
@@ -73,26 +81,64 @@
 					tiempoInicio = null;
 				}
 				tiempoPausa = null;
+				tiempoVuelta = null;
 				
 				reloj();
 
+				document.getElementById("tablavueltas").innerHTML = "";
+				vueltas = null;
+
 				updateButtons();
 			};
+
+			// Función que añade las vueltas
+			var lap = function(){
+				var tiempoActual = new Date() - (tiempoInicio || new Date());
+
+				tabla = document.getElementById("tablavueltas")
+				if (!vueltas) {
+					tabla.innerHTML += `<tr><th></th><th>Tiempo Vuelta</th><th>Tiempo total</th></tr>`
+					tiempoVuelta = tiempoActual;
+					vueltas = 1;
+				}
+				else {
+					console.log(tiempoActual+" - "+tiempoVuelta)
+					tiempoVuelta = tiempoActual - tiempoVuelta;
+					vueltas++;
+				}				
+				tabla.innerHTML += `<tr><td>${vueltas}</td><td>${mostrarTiempo(tiempoVuelta)}</td><td>${mostrarTiempo(tiempoActual)}</td></tr>`
+				
+
+			}
 		</script>
 	</head>
 
 	<body>
-		<div id="contenedor"></div>
-		<h1 id="temporizador">
-			<span id="minutos">00</span>
-			:
-			<span id="segundos">00</span>
-			:
-			<span id="milisegundos">00</span>	
-		</h1>
-		<input id="button-start" type="button" value="Start" onclick="init()" />
-		<input id="button-pause" type="button" value="Pause" onclick="pause()" />
-		<input id="button-reset" type="button" value="Reset" onclick="reset()" />
-		<input id="button-stop" type="button" value="Stop" onclick="stop()" />
+		<div class="contenedor">
+			<div class="temporizador">
+				<span id="minutos">00</span>
+				:
+				<span id="segundos">00</span>
+				:
+				<span id="milisegundos">00</span>	
+			</div>
+			<div class=botones>
+				<!-- <input id="button-start" class="button" type="button" value="Start" onclick="init()" />
+				<input id="button-stop" class="button" type="button" value="Stop" onclick="stop()" />
+				<input id="button-lap" class="button" type="button" value="Lap" onclick="lap()" />
+				<input id="button-reset" class="button" type="button" value="Reset" onclick="reset()" /> -->
+
+				<button id="button-start" class="button" onclick="init()">Start</button>
+				<button id="button-stop" class="button" onclick="stop()">Stop</button>
+				<button id="button-lap" class="button" onclick="lap()">Vuelta</button>
+				<button id="button-reset" class="button" onclick="reset()">Reset</button>
+			</div>
+			<div class="vueltas">
+				<!-- <h1>Vueltas:</h1> -->
+				<table id="tablavueltas">
+
+				</table>
+			</div>
+		</div>
 	</body>
 </html>
