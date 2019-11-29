@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Municipios</title>
+    <script>
+    window.onload = function(){
+        var x = new XMLHttpRequest();
+        x.onreadystatechange = function(){
+            if (x.readyState == 4 && x.status == 200) {
+                //console.log(x.responseText)
+                CargaAutonomias(JSON.parse(x.responseText));
+            }
+        }
+        x.open("GET","autonomias.php",true)
+        x.send();
+    }
+
+
+    function CargaAutonomias(autonomias){
+        for (var i = 0; i < autonomias.length; i++) {
+            document.getElementById("autonomia").innerHTML += `
+            <option value="${autonomias[i].id}">${autonomias[i].autonomia}</option>`
+        }
+    }
+
+    function Provincias(id){
+        var x = new XMLHttpRequest();
+        x.onreadystatechange = function(){
+            if (x.readyState == 4 && x.status == 200) {
+                CargaProvincias(JSON.parse(x.responseText));
+            }
+        }
+        x.open("GET","provincias.php?autonomia="+id,true)
+        x.send();
+    }
+
+    function CargaProvincias(provincias){
+        for (var i = 0; i < provincias.length; i++) {
+            document.getElementById("provincia").innerHTML += `
+            <option value="${provincias[i].id}">${provincias[i].provincia}</option>`
+        }
+    }
+
+    function Municipios(id){
+        var x = new XMLHttpRequest();
+        x.onreadystatechange = function(){
+            if (x.readyState == 4 && x.status == 200) {
+                CargaMunicipios(JSON.parse(x.responseText));
+            }
+        }
+        x.open("GET","municipios.php?provincia="+id,true)
+        x.send();
+    }
+
+    function CargaMunicipios(municipios){
+        for (var i = 0; i < municipios.length; i++) {
+            document.getElementById("municipio").innerHTML += `
+            <option value="${municipios[i].id}">${municipios[i].municipio}</option>`
+        }
+    }
+
+    function Wikipedia(municipio){
+        municipios = document.getElementById("municipio");
+        nombre = municipios.options[municipios.selectedIndex].innerHTML;
+        window.open("https://es.wikipedia.org/wiki/"+nombre);
+    }
+    </script>
+</head>
+<body>
+    <h1>Municipios de España</h1>
+    Autonomía <select id="autonomia" onchange="Provincias(this.value)">
+        <option value="-1">-- Elegir --</option>
+    </select>
+    Provincia: <select id="provincia" onchange="Municipios(this.value)">
+        <option value="-1">-- Elegir --</option>
+    </select>
+    Municipio: <select id="municipio">
+        <option value="-1">-- Elegir --</option>
+    </select>
+    <button onclick="Wikipedia()">IR A WIKIPEDIA</button>
+</body>
+</html>
