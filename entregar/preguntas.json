@@ -1,0 +1,21 @@
+[
+    {
+        "pregunta": "Pregunta",
+        "opciones": ["opcionA","opcionB","opcionC","opcionD"],
+        "correctas": ["opcionA","opcionB"]
+    },
+    {
+        "pregunta": "Pregunta",
+        "opciones": ["opcionA","opcionB","opcionC","opcionD"],
+        "correcta": "opcionA"
+    },
+    {
+        "pregunta": "Pregunta",
+        "lista": ["opcionA","opcionB","opcionC","opcionD"],
+        "correcta": "opcionA"
+    },
+    {
+        "pregunta": "Pregunta",
+        "respuesta": "opcionA"
+    }
+]
