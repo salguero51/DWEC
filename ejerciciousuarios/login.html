@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login de Usuario</title>
+    <script>
+    var ComprobarUsuario = () => {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if (xhr.responseText == "S") {
+                Seguimos();
+            }else{
+                alert("Usuario o password incorrectos");
+            }
+        }
+        xhr.open("POST","comprueba_usuario.php");
+        let usuario = document.getElementById("usuario").value;
+        let password = document.getElementById("password").value;
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+        xhr.send(`usuario=${usuario}&password=${password}`);
+    }
+    </script>
+</head>
+<body>
+    <h1>Login</h1>
+    Usuario <input type="text" id="usuario">
+    Contraseña <input type="password" id="password">
+    <button onclick="ComprobarUsuario()">Acceder</button>
+</body>
+</html>
