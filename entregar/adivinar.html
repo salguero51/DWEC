@@ -7,19 +7,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Adivinar</title>
     <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif
+        }
         body {
-            background: rgba(0,0,0,1);
+            background: rgba(0,0,0,0.9);
             color: white;
-            display: grid;
-            grid-template-columns: 1fr auto auto 1fr;
+            display: flex;
+            justify-content: center;
         }
-        body * {
-            border: 1px dotted red;
-        }
+        /*body * {
+            border: 1px dotted rgba(255,0,0,0.2);
+        }*/
         #casillero {
             display: grid;
             grid-template-columns: repeat(10, max-content);
             grid-template-rows: repeat(10, max-content);
+        }
+
+        .resultados {
+            width: 700px;
+            padding: 2em;
+        }
+
+        .resultados h1 {
+            height: 60px;
         }
 
         .bt {
@@ -39,21 +51,76 @@
             border-color: red;
             color: white;
         }
+
+        #np {
+            width: 200px;
+            font-size: 0.8em;
+        }
+
+        .head{
+            display: flex;
+            justify-content: space-between;
+            height: 100px;
+            width: 100%;
+        }
+
+        #tablaresultados {
+            width: 100%;
+            text-align: center;
+            font-size: 2em;
+        }
     </style>
     <script>
+        // Se declaran las variables del juego
+        var numero = 0;
+        var partidas = 0;
+        var intentos = 0;
+        var puntos = 0;
+        var totalpuntos = 0;
+        // Debug
+        var debug = false;
 
-
+        // Crea una partida al cargar la página
         window.onload = function () {
+            nuevaPartida();
+        }
+
+        // Función que crea una nueva partida
+        nuevaPartida = function(){
+           
+            generarBotones();
+            numero = generarNumero();
+            intentos = 1;
+            puntos = 0;
+            // Debug
+            if (debug) {
+                console.log("-- partida= "+partidas);
+            }
+        }
+
+        // Función que muestra en pantalla todos los botones correspondientes a cada número entre el 1 y el 100
+        generarBotones = function(){
+            if(document.getElementById("casillero").innerHTML.length != 0){
+                document.getElementById("casillero").innerHTML = "";
+            }
             for (let i = 1; i <= 100; i++) {
                 document.getElementById("casillero").innerHTML +=
                     `<button id="${i}" class="bt" onclick="comprobarBoton(${i})">${i}</button>`
             }
         }
+
+        // Función que elige aleatoriamente entre el 1 y el 100 el número a adivinar
         generarNumero = function () {
             let numero = Math.round(Math.random() * 100);
-            console.log("-- Número: " + numero)
+            if (numero == 0){numero = 1};
+            // Debug
+            if (debug) {
+                console.log("-- numero= " + numero)           
+            }
             return numero;
         }
+
+        // Función que desactiva todos los botones correspondidos entre dos valores
         disableBox = function (start, end) {
             for (let i = start; i <= end; i++) {
                 box = document.getElementById(i);
@@ -61,9 +128,43 @@
             }
         }
 
+        // Función ("Algoritmo") que determina la cantidad de puntos a obtener de la partida acutal.
+        contarPuntos = function(){
+            // El multiplicador se reduce según la cantidad de intentos
+            var multiplicador = 100 / intentos;
+            
+            // Recorrer todos los números
+            for (let i = 1; i <= 100; i++) {
+                // Si el número es opcionable y, o bien sea distinto del número a adivinar o sea el primer intento: 
+                if (document.getElementById(i).disabled == false && (i != numero || intentos == 1)) {
+                    puntos += Math.round(10 * multiplicador);                    
+                }
+            }
+            // Debug
+            if (debug) {
+                console.log("-- multiplicador= "+multiplicador+" intentos= "+intentos);
+                console.log("-- puntos= "+puntos+" totalpuntos= "+totalpuntos);           
+            }
+            totalpuntos += puntos;
+            imprimirPuntos();
+        }
+        // Función que muestra en pantalla la tabla con el total de puntos obtenidos
+        imprimirPuntos = function(){
+            document.getElementById("totalpuntos").innerHTML = totalpuntos;
+            tabla = document.getElementById("tablaresultados")
+            if (tabla.innerHTML == "") {
+                tabla.innerHTML += `<thead><tr><th>Partidas:</th><th>Intentos:</th><th>Puntos:</th></tr></thead>`
+            }			
+            tabla.innerHTML += `<tr><td>${partidas}.</td><td>${intentos}</td><td>${puntos}</td></tr>`
+        }
+
+        // Función que comprueba si el número selecionado es el número a adivinar, y si no
+        // llama a desactiva los botones según el rango
         comprobarBoton = function (id) {
             if (id == numero) {
                 document.getElementById(numero).style.backgroundColor = "lightgreen";
+                partidas++;
+                contarPuntos();
             } else {
                 if (id < numero) {
                     disableBox(1, id)
@@ -72,9 +173,10 @@
                     disableBox(id, 100)
                 }
             }
+            intentos++;
         }
 
-        var numero = generarNumero();
+        var numero = 0;
 
     </script>
 
@@ -84,7 +186,12 @@
     
     <div id="casillero"></div>
     <div class="resultados">
-        <h1>Test</h1>
+        <div class="head">
+            <h1>Total puntos: <span id="totalpuntos">0</span></h1>
+            
+            <button id="np" class="bt" onclick="nuevaPartida()">Nueva Partida</button>
+        </div>
+        <table id="tablaresultados"></table>
     </div>
 </body>
 
