@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Programacion TV</title>
+    <style>
+        img {width: 50px; height: 50px;}
+    </style>
+    <script>
+
+        Date.prototype.presentaCastellano = function(){
+            let meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto",
+                         "Septiembre","Octubre","Noviembre","Diciembre"]
+            return this.getDate() + " de " + meses[this.getMonth()] + " de " + this.getFullYear();
+
+        }
+
+        const fechaProgramacion = "2018-03-07";
+
+        window.addEventListener("load", function(){
+            document.getElementById("fechatexto").innerHTML = new Date(fechaProgramacion).presentaCastellano();
+            var x = new XMLHttpRequest();
+            x.addEventListener("load", function(){
+                let resultado = JSON.parse(x.responseText);
+                Mostrar(resultado.data);
+            });
+            x.open("GET","canales.php",true);
+            x.send();
+            
+        });
+
+        var Mostrar = (canales)=>{
+            canales.forEach((elemento)=>{
+                document.getElementById("logos").innerHTML +=
+                `<img src="logos/${elemento.url}" onclick="CargaProgramas(${elemento.id}, '${elemento.nombre}')" />`
+            });
+        }
+
+        var CargaProgramas = function(idCanal,nombreCanal){
+            var x = new XMLHttpRequest();
+            x.onreadystatechange = ()=>{
+                if (x.readyState == 4 && x.status == 200) {
+                    if (x.response == error) {
+                        
+                    }
+                    
+                }
+            }
+
+
+
+            x.addEventListener("load", function(){
+                let resultado = JSON.parse(x.responseText);
+                Mostrar(resultado.data);
+            });
+            x.open("GET","programas.php",true);
+            x.send(`id=${idCanal}&fecha=${fechaProgramacion}`);
+
+        }
+
+        var Presentar = function(programas, nombreCanal){
+            programas.sort(function(a,b){
+                if (a.hora<b.hora) return -1;
+                if (a.hora>b.hora) return 1;
+                return 0;
+            });
+            let capa = document.getElementById("programas")
+            capa.innerHTML = `<caption>${nombreCanal}</caption>`;
+            capa.innerHTML += "<tr><th>Hora</th><th>Programa</th></tr>"
+            programas.forEach(elemento => {
+                capa.innerHTML += `<tr><td>${elemento.hora}</td><td onclick="">${elemento.nombre}</td></tr>`;
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Programación de TV del <span id="fechatexto"></span></h1>
+    <p>Pulsa sobre el canal</p>
+    <div id="logos"></div>
+    <h4 id="canal"></h4>
+    <table id="programas"></table>
+</body>
+</html>
