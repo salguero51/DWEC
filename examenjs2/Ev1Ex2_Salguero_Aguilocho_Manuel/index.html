@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Montiel Música SL</title>
+    <script>
+    var nombre = "";
+    var codigo = "";
+
+    // Al intentar iniciar sesion comprueba usuario y contraseña, si es correcto, procede
+    var Login = () => {
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", () => {
+            profesor = JSON.parse(xhr.responseText);
+            if (profesor.length) {
+                ListaClase(profesor[0].codigo);
+                nombre = profesor[0].nombre;
+            } else {
+                window.alert("Usuario o password desconocidos")
+            }            
+        });
+        xhr.open("POST","servidor/login.php",true);
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+        xhr.send("usuario="+document.getElementById("usuario").value+
+                "&password="+document.getElementById("password").value);
+    }
+    // Carga la lista de la clase, y procede a presentarla
+    var ListaClase = (profesor) => {
+        var x = new XMLHttpRequest();
+        x.addEventListener("load", () => {
+            lista = JSON.parse(x.responseText);
+            console.log(lista);
+            PresentarLista(lista);
+        })
+        x.open("GET","servidor/lista.php?profesor="+profesor+"&dia="+LetraSemana(),true)
+        x.send();
+    }
+
+    // Presenta la lista en la pagina de alumnos
+    var PresentarLista = function(lista){
+        var html = `<h3>Lista de clase de los ${DiaSemana()} de ${nombre}</h3>`;
+
+        if (lista.length) {
+            html += "<table border=1 ><tr><th>Nombre</th><th>Instrumento</th><th>Hora</th></tr>"
+            var hora = lista[0].hora;
+            lista.forEach(alumno => {
+                if (hora != alumno.hora) {
+                    html += '<tr><td colspan="4">&nbsp;</td></tr>';
+                }
+                html += `
+                <tr onmouseover="tfnon(${alumno.id},${alumno.telefono})" onmouseout="tfnoff(${alumno.id},${alumno.telefono})" id="${alumno.id}"><td>${alumno.nombre}</td><td>${alumno.instrumento}</td><td>${alumno.hora}</td><td><button onclick="PonerFalta(${alumno.id}, '${alumno.hora}')">Poner Falta</button></td></tr>
+                `
+            });
+            html += '</table><p id="tlf">'
+        } else {
+            html += "<p style='color: red;'>!! USTED NO TIENE CLASES HOY !!</p>"
+        }
+        
+        document.getElementById("lista").innerHTML = html;
+    }
+    
+    // al pulsar el boton registra la falta en la bd
+    var PonerFalta = (id, hora) => {
+        console.log(id, hora);
+        console.log(FechaHoy());
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", () => {
+            res = xhr.responseText;
+            if (res == "ok") {
+                //window.alert("ok")
+            } else {
+                window.alert("error")
+            }            
+        });
+        xhr.open("POST","servidor/falta.php",true);
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+        xhr.send("alumno="+id+"&fecha="+FechaHoy()+"&hora="+hora);
+    }
+    // segun el dia de la semana devuelve la id del dia
+    var LetraSemana = function(){
+        var d = new Date();
+        var LetraSemana = new Array(7);
+        LetraSemana[0] = "D";
+        LetraSemana[1] = "L";
+        LetraSemana[2] = "M";
+        LetraSemana[3] = "X";
+        LetraSemana[4] = "J";
+        LetraSemana[5] = "V";
+        LetraSemana[6] = "S";
+
+        return LetraSemana[d.getDay()];
+    }
+    // segun el dia de la semana devuelve el nombre en castellano
+    var DiaSemana = function(){
+        var d = new Date();
+        var diasemana = new Array(7);
+        diasemana[0] = "Domingo";
+        diasemana[1] = "Lunes";
+        diasemana[2] = "Martes";
+        diasemana[3] = "Miércoles";
+        diasemana[4] = "Jueves";
+        diasemana[5] = "Viernes";
+        diasemana[6] = "Sábado";
+
+        return diasemana[d.getDay()];
+    }
+    // devuelve la fecha actual en el formato aaaa-mm-dd
+    var FechaHoy = function(){
+        var hoy = new Date();
+        return hoy.toISOString().substring(0, 10);
+    }
+    // muestra el tfn y el color azul en la tupla
+    var tfnon = function(id, tlf){
+        document.getElementById(id).style = "background-color: cyan;"
+        document.getElementById("tlf").innerHTML = "Teléfono: "+tlf;
+    }
+    // desabilita el tfn y el color de la tupla
+    var tfnoff = function(id, tlf){
+        document.getElementById(id).style = "background-color: white;"
+        document.getElementById("tlf").innerHTML = "";
+    }
+    </script>
+</head>
+<body>
+    <h1>Montiel Música S.L.</h1>
+    <form id="form" action="#" o  onsubmit="return false">
+            <p>Nombre <input type="text" id="usuario" name="usuario">
+            Contraseña <input type="password" id="password" name="password">
+            <button onclick="Login()">Login</button></p>
+    </form>
+
+    <div id="lista">
+        
+    </div>
+</body>
+</html>
