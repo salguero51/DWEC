@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- 
+            jusanre8@gmail.com
+
         Realiza una página HTML que presente un breve test de preguntas sobre
         Javascript que contenga 4 preguntas de diferente tipo:
             1. Una pregunta con más de una respuesta posible: (varios checkbox)
@@ -19,18 +22,125 @@
         * {
             font-family: Arial, Helvetica, sans-serif
         }
+
         body {
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
             display: flex;
             justify-content: center;
-        }    
+        }
     </style>
     <script>
-        
+        var preguntas = [
+            {
+                "id": "0",
+                "pregunta": "Javascript se ejecuta...",
+                "tipo": "multiple",
+                "opciones": ["En el cliente", "En el suelo", "En el servidor", "Nunca"],
+                "correctas": ["En el cliente", "En el servidor"]
+            },
+            {
+                "id": "1",
+                "pregunta": "Javascript es un lenguaje...",
+                "tipo": "select",
+                "opciones": ["Compilado", "Interpretado"],
+                "correcta": "Interpretado"
+            },
+            {
+                "id": "1",
+                "pregunta": "Pregunta",
+                "tipo": "radio",
+                "opciones": ["opcionA", "opcionB", "opcionC", "opcionD"],
+                "correcta": "opcionA"
+            },
+            {
+                "id": "2",
+                "pregunta": "¿Qué significa JS",
+                "tipo": "texto",
+                "respuesta": "javascript"
+            }
+        ]
+
+        var Iniciar = function () {
+            document.getElementById("preguntas").innerHTML = "";
+            preguntas.forEach(pregunta => {
+                imprimirPregunta(pregunta);
+            });
+            imprimirBotones();
+        }
+        var imprimirPregunta = function (pregunta) {
+            var html = `<h2>${pregunta.pregunta}</h2>`;
+            switch (pregunta.tipo) {
+                case "radio":
+                    for (let i = 0; i < pregunta.opciones.length; i++) {
+                        html += `<input type="radio" name="${pregunta.id}" id="${[i]}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input><br>`;
+                    }
+                    break;
+                case "multiple":
+                    for (let i = 0; i < pregunta.opciones.length; i++) {
+                        html += `<input type="checkbox" name="${pregunta.id}" id="${[i]}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input><br>`;
+                    }
+                    break;
+                case "select":
+                    html += `<select id=${pregunta.id}>`;
+                    pregunta.opciones.forEach(opcion => {
+                        html += `<option value="${opcion}">${opcion}</option>`;
+                    });
+                    html += `</select>`;
+                    break;
+                case "texto":
+                    html += `<input type="text" id="${pregunta.id}">`;
+
+                    break;
+                default:
+                    break;
+            }
+            document.getElementById("preguntas").innerHTML += html;
+        }
+        var imprimirBotones = function () {
+            var html = `
+            <button onclick="Corregir()">Corregir</button>
+            <button onclick="Iniciar()">Reset</button>
+            `;
+
+            document.getElementById("botones").innerHTML = html;
+        }
+
+        var corregirPreguntas = function(){
+            preguntas.forEach(pregunta => {
+                switch (pregunta.tipo) {
+                    case "radio":
+                    document.getElementsByName(pregunta.id)
+                    break;
+                case "multiple":
+                    for (let i = 0; i < pregunta.opciones.length; i++) {
+                        html += `<input type="checkbox" name="${pregunta.id}" id="${[i]}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input><br>`;
+                    }
+                    break;
+                case "select":
+                    html += `<select id=${pregunta.id}>`;
+                    pregunta.opciones.forEach(opcion => {
+                        html += `<option value="${opcion}">${opcion}</option>`;
+                    });
+                    html += `</select>`;
+                    break;
+                case "texto":
+                    html += `<input type="text" id="${pregunta.id}">`;
+
+                    break;
+                default:
+                    break;
+                }
+            });
+
+        }
+            onload = () => Iniciar();
     </script>
 </head>
+
 <body>
-    
+    <div id="preguntas"></div>
+    <div id="botones"></div>
 </body>
+
 </html>

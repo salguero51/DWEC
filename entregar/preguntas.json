@@ -1,21 +1,19 @@
 [
     {
         "pregunta": "Pregunta",
+        "tipo": "4opciones",
         "opciones": ["opcionA","opcionB","opcionC","opcionD"],
         "correctas": ["opcionA","opcionB"]
     },
     {
         "pregunta": "Pregunta",
+        "tipo": "4opciones",
         "opciones": ["opcionA","opcionB","opcionC","opcionD"],
         "correcta": "opcionA"
     },
     {
         "pregunta": "Pregunta",
-        "lista": ["opcionA","opcionB","opcionC","opcionD"],
-        "correcta": "opcionA"
-    },
-    {
-        "pregunta": "Pregunta",
+        "tipo": "texto",
         "respuesta": "opcionA"
     }
 ]
