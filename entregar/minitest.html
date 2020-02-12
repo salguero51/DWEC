@@ -11,7 +11,8 @@
             2. Una pregunta con una sola respuesta de entre varias: (botones de radio excluyentes)
             3. Una pregunta con una sola respuesta a elegir de una lista (lista desplegable simple)
             4. Una pregunta con una sola respuesta que se solicita al usuario (campo de texto)
-        La página mostrará un botón Corregir tras la pulsación del cual se mostrará el porcentaje de aciertos y el número de intentos realizados. Tras el primer intento, el botón aparecerá como "Reintentar".
+        La página mostrará un botón Corregir tras la pulsación del cual se mostrará el porcentaje de aciertos y 
+        el número de intentos realizados. Tras el primer intento, el botón aparecerá como "Reintentar".
         Cuando se hayan acertado todas las preguntas (100% de aciertos) el botón de Corrección se deshabilitará.
      -->
     <meta charset="UTF-8">
@@ -26,8 +27,16 @@
         body {
             background: rgba(0, 0, 0, 0.9);
             color: white;
-            display: flex;
+            display: grid;
             justify-content: center;
+        }
+
+        .preguntas {
+            width: auto;
+        }
+
+        .botones {
+            width: auto;
         }
     </style>
     <script>
@@ -37,7 +46,7 @@
                 "pregunta": "Javascript se ejecuta...",
                 "tipo": "multiple",
                 "opciones": ["En el cliente", "En el suelo", "En el servidor", "Nunca"],
-                "correctas": ["En el cliente", "En el servidor"]
+                "correctas": [true, false, true, false]
             },
             {
                 "id": "1",
@@ -47,100 +56,173 @@
                 "correcta": "Interpretado"
             },
             {
-                "id": "1",
-                "pregunta": "Pregunta",
+                "id": "2",
+                "pregunta": "Para terminar las instrucciones en Javascript se utiliza:",
                 "tipo": "radio",
-                "opciones": ["opcionA", "opcionB", "opcionC", "opcionD"],
-                "correcta": "opcionA"
+                "opciones": ["Un punto y coma", "Un punto y coma o un salto de línea", "La sentencia End.", "Dos puntos"],
+                "correcta": "Un punto y coma o un salto de línea"
             },
             {
-                "id": "2",
+                "id": "3",
                 "pregunta": "¿Qué significa JS",
                 "tipo": "texto",
                 "respuesta": "javascript"
             }
         ]
+        var aciertos;
+        var prelong;
+        var calculo;
 
         var Iniciar = function () {
+            aciertos = 0;
+            calculo = 0;
+            prelong = preguntas.length
             document.getElementById("preguntas").innerHTML = "";
             preguntas.forEach(pregunta => {
                 imprimirPregunta(pregunta);
             });
-            imprimirBotones();
+            imprimirBotones(true);
         }
         var imprimirPregunta = function (pregunta) {
             var html = `<h2>${pregunta.pregunta}</h2>`;
             switch (pregunta.tipo) {
                 case "radio":
                     for (let i = 0; i < pregunta.opciones.length; i++) {
-                        html += `<input type="radio" name="${pregunta.id}" id="${[i]}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input><br>`;
+                        html += `<p><input type="radio" name="${pregunta.id}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input></p>`;
                     }
                     break;
                 case "multiple":
                     for (let i = 0; i < pregunta.opciones.length; i++) {
-                        html += `<input type="checkbox" name="${pregunta.id}" id="${[i]}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input><br>`;
+                        html += `<p><input type="checkbox" name="${pregunta.id}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input></p>`;
                     }
                     break;
                 case "select":
-                    html += `<select id=${pregunta.id}>`;
+                    html += `<p><select id=${pregunta.id}>`;
                     pregunta.opciones.forEach(opcion => {
-                        html += `<option value="${opcion}">${opcion}</option>`;
+                        html += `<option value="${opcion}" name="${pregunta.id}">${opcion}</option>`;
                     });
-                    html += `</select>`;
+                    html += `</select></p>`;
                     break;
                 case "texto":
-                    html += `<input type="text" id="${pregunta.id}">`;
-
+                    html += `<p><input type="text" id="${pregunta.id}"></p>`;
                     break;
                 default:
                     break;
             }
             document.getElementById("preguntas").innerHTML += html;
         }
-        var imprimirBotones = function () {
-            var html = `
-            <button onclick="Corregir()">Corregir</button>
-            <button onclick="Iniciar()">Reset</button>
-            `;
-
+        var imprimirBotones = function (seronoser) {
+            var html = "";
+            if (seronoser) {
+                html = `<button id="boton" onclick="corregirPreguntas()">Corregir</button>`;
+            } else {
+                html = `<button id="boton" onclick="Iniciar()">Volver a intentar</button>`;
+            }
             document.getElementById("botones").innerHTML = html;
         }
 
-        var corregirPreguntas = function(){
+        var corregirPreguntas = function () {
             preguntas.forEach(pregunta => {
                 switch (pregunta.tipo) {
                     case "radio":
-                    document.getElementsByName(pregunta.id)
-                    break;
-                case "multiple":
-                    for (let i = 0; i < pregunta.opciones.length; i++) {
-                        html += `<input type="checkbox" name="${pregunta.id}" id="${[i]}" value="${pregunta.opciones[i]}">${pregunta.opciones[i]}</input><br>`;
-                    }
-                    break;
-                case "select":
-                    html += `<select id=${pregunta.id}>`;
-                    pregunta.opciones.forEach(opcion => {
-                        html += `<option value="${opcion}">${opcion}</option>`;
-                    });
-                    html += `</select>`;
-                    break;
-                case "texto":
-                    html += `<input type="text" id="${pregunta.id}">`;
+                        var respondida = false;
+                        document.getElementsByName(pregunta.id).forEach(respuesta => {
+                            if (respuesta.checked) {
+                                respondida = true;
+                                if (respuesta.value == pregunta.correcta) {
+                                    respuesta.parentElement.style.color = "green";
+                                    aciertos++;
+                                } else {
+                                    respuesta.parentElement.style.color = "red";
+                                }
+                            } else {
+                                if (respuesta.value == pregunta.correcta) {
+                                    respuesta.parentElement.style.color = "orange";
+                                }
+                            }
 
-                    break;
-                default:
-                    break;
+                        });
+
+                        break;
+                    case "multiple":
+                        var i = 0;
+                        prelong = prelong - 1;
+                        document.getElementsByName(pregunta.id).forEach(respuesta => {
+                            if (pregunta.correctas[i]) prelong++;
+                            if (respuesta.checked == pregunta.correctas[i]) {
+                                respuesta.parentElement.style.color = "green";
+                                if (respuesta.checked) aciertos++;
+                            } else {
+                                if (respuesta.checked) {
+                                    respuesta.parentElement.style.color = "red";
+                                    aciertos--;
+                                } else {
+                                    respuesta.parentElement.style.color = "orange";
+                                }
+                            }
+                            i++;
+                        });
+                        break;
+                    case "select":
+                        var respuesta = document.getElementById(pregunta.id)
+                        if (respuesta.value == pregunta.correcta) {
+                            respuesta.parentElement.innerHTML += " Correcta"
+                            document.getElementById(pregunta.id).parentElement.style.color = "green"
+                            aciertos++;
+                        } else {
+                            respuesta.parentElement.innerHTML += " Incorrecta";
+                            document.getElementById(pregunta.id).parentElement.style.color = "red";
+                        }
+
+                        break;
+                    case "texto":
+                        var respuesta = document.getElementById(pregunta.id);
+                        var hint = ` Es "${pregunta.respuesta}"`;
+                        if (respuesta.value) {
+                            if (respuesta.value.toLowerCase() == pregunta.respuesta.toLowerCase()) {
+                                respuesta.parentElement.innerHTML += " Correcta"
+                                document.getElementById(pregunta.id).parentElement.style.color = "green"
+                                aciertos++;
+                            } else {
+                                respuesta.parentElement.innerHTML += hint;
+                                document.getElementById(pregunta.id).parentElement.style.color = "red"
+                            }
+                        } else {
+                            respuesta.parentElement.innerHTML += hint;
+                            document.getElementById(pregunta.id).parentElement.style.color = "orange"
+                        }
+                        break;
+                    default:
+                        break;
                 }
             });
-
+            imprimirResultados();
+            if (calculo != 100) {
+                imprimirBotones(false);
+            } else {
+                document.getElementById("boton").disabled = true;
+            }
         }
-            onload = () => Iniciar();
+
+        var imprimirResultados = function () {
+            if (aciertos < 0) {
+                aciertos = 0;
+            }
+            calculo = aciertos / prelong * 100;
+            var html = `
+            <h4>Aciertos: ${calculo}%</h4>
+            `;
+            document.getElementById("stats").innerHTML = html;
+        }
+
+        onload = () => Iniciar();
     </script>
 </head>
 
 <body>
     <div id="preguntas"></div>
     <div id="botones"></div>
+    <div id="stats"></div>
 </body>
 
 </html>
