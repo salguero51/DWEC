@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Examen</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready( function() {
+            MostrarSolo("comienzo");
+        });
+
+
+
+
+
+
+        function MostrarSolo(id) {
+            $('div').hide();
+            $("#" + id).show();
+        }
+
+    </script>
+</head>
+<body>
+    <div id="comienzo">
+        <input type="text" name="nombre" id="nombre">
+        <input type="button" value="Comenzar">
+    </div>
+    <div id="bienvenida">
+        <h1>Bienvenido, <span id="usuario"></span></h1>
+        <button>Pregunta</button>
+        <button>Plantarse</button>
+    </div>
+    <div id="pregunta">
+
+    </div>
+    <div id="despedida">
+        <h2>¡FIN DE LA PARTIDA!</h2>
+    </div>
+</body>
+</html>

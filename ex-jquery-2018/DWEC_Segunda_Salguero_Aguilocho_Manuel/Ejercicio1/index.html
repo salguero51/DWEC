@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Diccionario</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="diccionario.js"></script>
+    <script>
+        
+
+        $(document).ready( function() {
+            PalabrasAllVocales();
+        });
+
+        var total
+
+        function PalabrasAllVocales() {
+            palabras = JSON.parse(palabras)
+            total = 0
+            palabras.forEach(palabra => {
+                //if (/\b(?=\w*?.[aá])(?=\w*?.[eé])(?=\w*?.[ií])(?=\w*?.[oóö])(?=\w*?.[uúü])[^\W\d_]+\b/.test(palabra)) {
+                if (/(?=.*A)(?=.*E)(?=.*I)(?=.*O)(?=.*[UÜ])\w*/.test(palabra)) {
+                    total++;
+                    console.log(palabra);
+                }
+                else {
+                }
+            });
+            console.log(total)
+        }
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
