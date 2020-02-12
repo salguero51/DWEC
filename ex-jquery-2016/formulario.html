@@ -5,8 +5,19 @@
 <title>Formulario y Ajax para pasar a jQuery</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-var peticionAjax = null;
-window.onload = function(){
+
+$(document).ready(function() {
+	$.getJSON("menu.php", {nocache: Math.random()}, function(respuesta)
+	{
+		$.each(respuesta.sort(), function(index, value) {
+			$('#menu').append(new Option(value, value));
+		});		
+	});
+});
+
+////////////////////////////////////////////////////////////////////////////////////
+/*var peticionAjax = null;
+$(document).ready( function() {
 	
 	if (window.XMLHttpRequest) {
       peticionAjax = new XMLHttpRequest();
@@ -19,7 +30,8 @@ window.onload = function(){
   
   peticionAjax.open('GET', 'menu.php'+'?nocache='+Math.random(), false);
   peticionAjax.send(null);
-}
+
+});
 
 function CargaMenu(){
   if (this.readyState == 4 && this.status == 200) {
@@ -33,7 +45,12 @@ function CargaMenu(){
 			x.add(option);
 		}
    }
+}*/
+
+function Presenta() {
+	
 }
+
 
 // Presenta los datos del formulario
 function Presenta(){
