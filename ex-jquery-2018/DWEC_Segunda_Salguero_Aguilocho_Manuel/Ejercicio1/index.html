@@ -21,19 +21,19 @@
             total = 0
             palabras.forEach(palabra => {
                 //if (/\b(?=\w*?.[aá])(?=\w*?.[eé])(?=\w*?.[ií])(?=\w*?.[oóö])(?=\w*?.[uúü])[^\W\d_]+\b/.test(palabra)) {
-                if (/(?=.*A)(?=.*E)(?=.*I)(?=.*O)(?=.*[UÜ])\w*/.test(palabra)) {
+                if (/(?=.*a)(?=.*e)(?=.*i)(?=.*o)(?=.*[uü])\w*/.test(palabra.toLowerCase())) {
                     total++;
-                    console.log(palabra);
-                }
-                else {
+                    $("#lista").append(`<li>${palabra}</li>`);
                 }
             });
-            console.log(total)
+            alert(total);
         }
 
     </script>
 </head>
 <body>
-    
+    <ul id="lista">
+        
+    </ul>
 </body>
 </html>
