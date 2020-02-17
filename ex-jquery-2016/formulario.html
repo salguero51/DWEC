@@ -48,30 +48,35 @@ function CargaMenu(){
 }*/
 
 function Presenta() {
-	
+	text = "";
+	$('[name=form1]').serializeArray().forEach(element => {
+		text += `${element.name}: ${element.value}\n`
+	});
+	alert(text)
+	return false;
 }
 
 
 // Presenta los datos del formulario
-function Presenta(){
+/*function oPresenta(){
 	var nombre = document.form1.nombre.value;
 	var comentario = document.form1.comentario.value;
 	var menu = "";
 	for (var i=0;i<document.form1.menu.options.length;i++){
-			if (document.form1.menu.options[i].selected){
-					menu += document.form1.menu.options[i].value+' ';
-			}
+		if (document.form1.menu.options[i].selected){
+			menu += document.form1.menu.options[i].value+' ';
+		}
 	}
 	var condiciones = document.form1.condiciones.checked;
 	alert("Nombre : "+nombre+"\nComentario : "+comentario+"\nMenú : "+menu+"\nCondiciones : "+condiciones);
 	return false;
-}
+}*/
 </script>
 
 </head>
 
 <body>
-<form name="form1" onSubmit="return Presenta()">
+<form name="form1" Submit="return Presenta()">
 Nombre: <input type="text" name="nombre" /><br />
 Comentario: <textarea name="comentario"></textarea><br/>
 Menú de selección múltiple: 

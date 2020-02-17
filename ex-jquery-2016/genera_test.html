@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de examenes tipo test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#footer").hide();
+            CargarPreguntas();
+        });
+        function CargarPreguntas() {
+            $.getJSON("test.json", {nocache: Math.random()}, function(respuesta)
+            {
+                respuesta.sort(function(a, b){return 0.5 - Math.random()});
+                var i = 0
+                preguntas = [];
+                $.each(respuesta, function(index, value) {
+                    if(value.categoria == $("[name=categoria]").children("option:selected").val()){
+                        preguntas.push(value)
+                        i++
+                    }                
+                    return (i < $("[name=numero]").val())
+                });
+                PresentarPreguntas();
+            });
+        }
+
+        function PresentarPreguntas() {
+            html = `<form action="">`
+            var i = 1;
+            preguntas.forEach(pregunta => {
+                console.log(pregunta)
+                html += `<p>${i}. - ${pregunta.pregunta}</p>`;
+                pregunta.respuestas.forEach(respuesta => {
+                    html += `<p><input type="radio" name="${pregunta.idpregunta}" value="${respuesta.idrespuesta}">${respuesta.respuesta}</p>`
+                });
+                i++;
+            });
+            html += `<input type="button" value="Corregir"></form>`
+            $("#preguntas").html(html);
+        };
+
+        function Corregir() {
+            preguntas.forEach(pregunta => {
+                
+            });
+        }
+        
+    </script>
+</head>
+<body>
+    <h2>Generador de examenes tipo test</h2>
+    <form action="#" onsubmit="CargarPreguntas(); return false">
+        <p>
+            Categoría: 
+            <select name="categoria">
+                <option value="1">javascript</option>
+                <option value="2" selected>jQuery</option>
+                <option value="3">AngularJS</option>
+                <option value="4">PHP</option>
+                <option value="5">SQL</option>
+            </select>
+            Cantidad de preguntas:
+            <input type="number" name="numero" value="10">
+            <input type="submit" value="Generar Test">
+            <span id="tiempo"></span>
+        </p>
+    </form>
+    <hr>
+    <div id="preguntas">
+    </div>    
+    <div id="footer"><hr>
+        <p>
+            <span>Aciertos:</span>
+            <span>Fallos:</span>
+            <span>Nota EXAMEN:</span>
+        </p>
+    </div>
+</body>
+</html>
