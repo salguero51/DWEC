@@ -1,11 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parejas</title>
+    <style>
+        .container {
+            width: 200px;
+            height: 260px;
+            position: relative;
+            border: 0px solid #ccc;
+            -webkit-perspective: 800px;
+            -moz-perspective: 800px;
+            -o-perspective: 800px;
+            perspective: 800px;
+            margin: 1em;
+            display: inline-grid;
+
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            /**position: absolute;**/
+            -webkit-transition: -webkit-transform 1s;
+            -moz-transition: -moz-transform 1s;
+            -o-transition: -o-transform 1s;
+            transition: transform 1s;
+            -webkit-transform-style: preserve-3d;
+            -moz-transform-style: preserve-3d;
+            -o-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            -webkit-transform-origin: 50% 50%;
+        }
+
+        .card div {
+            display: block;
+            height: 100%;
+            width: 100%;
+            line-height: 260px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-size: 140px;
+            position: absolute;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -o-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 50px;
+        }
+
+        .card .front {
+            background: lightgreen;
+            border: 5px solid lime;
+        }
+
+        .card .back {
+            background: aqua;
+            border: 5px solid lightseagreen;
+            -webkit-transform: rotateY(180deg);
+            -moz-transform: rotateY(180deg);
+            -o-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+        }
+
+        .card.flipped {
+            -webkit-transform: rotateY(180deg);
+            -moz-transform: rotateY(180deg);
+            -o-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        var emojis;
+        var cartas;
+        var flipped = [];
+        var flipped1 = '';
+        var flipped2 = '';
+        $(document).ready(function () {
+            emojis = []
+            for (let i = 127813; i < 127859; i++) {
+                emojis.push(i);
+            }
+            emojis = shuffle(emojis);
+
+            $("#empezar").click(function () {
+                ncartas = $("#num").val();
+                cartas = [];
+                flipped = [];
+                flipped1 = 0;
+                flipped2 = 0;
+                $("#mesa").empty()
+                for (let i = 0; i < ncartas; i++) {
+                    cartas.push(emojis[i]);
+                    cartas.push(emojis[i]);
+                }
+                PresentaCartas(shuffle(cartas))
+            })
+
+            function PresentaCartas(taco) {
+                var i = 1;
+                taco.forEach(carta => {
+                    $("#mesa").append(`
+                    <section class="container">
+                        <div id="${i}" class="card" onclick="flip(${i})">
+                            <div class="front"></div>
+                            <div class="back">&#${carta};</div>
+                        </div>
+                    </section>
+                    `),
+                        i++;
+                });
+            }
+        });
+
+        function flip(carta) {
+            if (flipped.includes(carta) || carta == flipped1 || carta == flipped2) {
+                return;
+            }
+            if (!flipped1) {
+                flipped1 = carta;
+                $('#' + flipped1).toggleClass('flipped');
+            } else {
+                if (!flipped2) {
+                    flipped2 = carta;
+                    $('#' + flipped2).toggleClass('flipped'); 
+                    if (flipped.length >= cartas.length-2) {
+                        HasGanado();
+                    }
+                } else {
+                    if ($('#' + flipped1).children('.back').text() == $('#' + flipped2).children('.back').text()) {
+                        flipped.push(flipped1);
+                        flipped.push(flipped2);
+                        
+                    }else {
+                        $('#' + flipped1).toggleClass('flipped');
+                        $('#' + flipped2).toggleClass('flipped');
+                    }
+                    flipped1 = 0;
+                    flipped2 = 0;
+                    flip(carta);
+                }
+            }
+        }
+
+            function HasGanado() {
+                console.log("Has ganado")
+            };
+
+        
+
+        function shuffle(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+
+            while (0 !== currentIndex) {
+
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+        }
+
+    </script>
 </head>
+
 <body>
-    
+    <header>
+        <h1>Encuentra las parejas</h1>
+        <p>¿Con cuántas parejas de cartas quieres jugar? <input type="number" name="num" id="num" min="3" value="10"
+                required><button id="empezar">Generar</button></p>
+    </header>
+    <div id="mesa" class="mesa">
+
+    </div>
 </body>
+
 </html>
