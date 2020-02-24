@@ -6,6 +6,7 @@
     <title>Generador de examenes tipo test</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
+        var debug = false
         $(document).ready(function() {
             $("#footer").hide();
             CargarPreguntas();
@@ -34,7 +35,8 @@
                 console.log(pregunta)
                 html += `<p>${i}. - ${pregunta.pregunta}</p>`;
                 pregunta.respuestas.forEach(respuesta => {
-                    html += `<p><input type="radio" name="${pregunta.idpregunta}" value="${respuesta.idrespuesta}">${respuesta.respuesta}</p>`
+                    if (debug && pregunta.correcta == respuesta.idrespuesta) var tcorr = " style='color:green;'" 
+                    html += `<p${tcorr}><input type="radio" name="${pregunta.idpregunta}" value="${respuesta.idrespuesta}">${respuesta.respuesta}</p>`
                 });
                 i++;
             });
