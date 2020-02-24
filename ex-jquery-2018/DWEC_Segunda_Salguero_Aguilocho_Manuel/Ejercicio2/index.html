@@ -10,23 +10,24 @@
         $(document).ready( function() {
             MostrarSolo("comienzo");
         });
-
-
-
-
-
-
         function MostrarSolo(id) {
             $('div').hide();
             $("#" + id).show();
         }
 
+        $.getJSON("preguntas.json", {nocache: Math.random()}, function(respuesta)
+        {
+            	
+        });
+
     </script>
 </head>
 <body>
     <div id="comienzo">
+        <p>Nombre: 
         <input type="text" name="nombre" id="nombre">
         <input type="button" value="Comenzar">
+        </p>
     </div>
     <div id="bienvenida">
         <h1>Bienvenido, <span id="usuario"></span></h1>
