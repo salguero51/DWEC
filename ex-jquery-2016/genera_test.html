@@ -6,7 +6,7 @@
     <title>Generador de examenes tipo test</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        var debug = false
+        var debug = true
         $(document).ready(function() {
             $("#footer").hide();
             CargarPreguntas();
@@ -29,25 +29,39 @@
         }
 
         function PresentarPreguntas() {
-            html = `<form action="">`
+            html = `<form name="preguntas" action="#">`
             var i = 1;
             preguntas.forEach(pregunta => {
-                console.log(pregunta)
+                if (debug) console.log(pregunta);
                 html += `<p>${i}. - ${pregunta.pregunta}</p>`;
                 pregunta.respuestas.forEach(respuesta => {
-                    if (debug && pregunta.correcta == respuesta.idrespuesta) var tcorr = " style='color:green;'" 
+                    var tcorr = ''
+                    if (debug && pregunta.correcta == respuesta.idrespuesta) tcorr = " style='color:green;'" 
                     html += `<p${tcorr}><input type="radio" name="${pregunta.idpregunta}" value="${respuesta.idrespuesta}">${respuesta.respuesta}</p>`
                 });
                 i++;
             });
-            html += `<input type="button" value="Corregir"></form>`
+            html += `<input id="corregir" type="button" value="Corregir" onclick="Corregir();"/></form>`
             $("#preguntas").html(html);
+            $("#corregir").attr("disabled", false);
         };
 
         function Corregir() {
+            var aciertos = 0;
+            var fallos = 0;
             preguntas.forEach(pregunta => {
-                
+                respuesta = $('input[name='+pregunta.idpregunta+']:checked').val();
+                if (typeof respuesta !== "undefined") {
+                    if (pregunta.correcta == $('input[name='+pregunta.idpregunta+']:checked').val()) {
+                        aciertos++;
+                    } else {
+                        fallos++;
+                    }
+                }
             });
+            var nota = ((aciertos-fallos)*10)/preguntas.length;
+            $("#corregir").attr("disabled", true);
+            alert(`Aciertos: ${aciertos} Fallos: ${fallos} Nota: ${nota}`);
         }
         
     </script>

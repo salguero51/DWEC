@@ -5,48 +5,18 @@
 <title>Formulario y Ajax para pasar a jQuery</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-
 $(document).ready(function() {
+	// Obtiene los datos json desde menu.php
 	$.getJSON("menu.php", {nocache: Math.random()}, function(respuesta)
 	{
+		// por cada elemento obtenido, añade por orden una opción al menú
 		$.each(respuesta.sort(), function(index, value) {
 			$('#menu').append(new Option(value, value));
 		});		
 	});
 });
 
-////////////////////////////////////////////////////////////////////////////////////
-/*var peticionAjax = null;
-$(document).ready( function() {
-	
-	if (window.XMLHttpRequest) {
-      peticionAjax = new XMLHttpRequest();
-    }
-    else {
-      peticionAjax = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-  
-  peticionAjax.onreadystatechange = CargaMenu;
-  
-  peticionAjax.open('GET', 'menu.php'+'?nocache='+Math.random(), false);
-  peticionAjax.send(null);
-
-});
-
-function CargaMenu(){
-  if (this.readyState == 4 && this.status == 200) {
-		var salida = "";
-		var obj = JSON.parse(this.responseText);
-		obj = obj.sort();
-		for (var i=0;i<obj.length;i++){
-			var x = document.getElementById("menu");
-			var option = document.createElement("option");
-			option.text = obj[i];
-			x.add(option);
-		}
-   }
-}*/
-
+// Presenta los datos del formulario mediante un alert
 function Presenta() {
 	text = "";
 	$('[name=form1]').serializeArray().forEach(element => {
@@ -55,22 +25,6 @@ function Presenta() {
 	alert(text)
 	return false;
 }
-
-
-// Presenta los datos del formulario
-/*function oPresenta(){
-	var nombre = document.form1.nombre.value;
-	var comentario = document.form1.comentario.value;
-	var menu = "";
-	for (var i=0;i<document.form1.menu.options.length;i++){
-		if (document.form1.menu.options[i].selected){
-			menu += document.form1.menu.options[i].value+' ';
-		}
-	}
-	var condiciones = document.form1.condiciones.checked;
-	alert("Nombre : "+nombre+"\nComentario : "+comentario+"\nMenú : "+menu+"\nCondiciones : "+condiciones);
-	return false;
-}*/
 </script>
 
 </head>
