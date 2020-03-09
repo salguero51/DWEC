@@ -28,32 +28,32 @@
         var jsonpalabras  = `[
                                 {
                                     "id": 1,
-                                    "vocablo" : "curiosidad",
+                                    "vocablo" : "CURIOSIDAD",
                                     "descripcion" : "Cualidad creativa, base del progreso personal"
                                 },
                                 {
                                     "id": 2,
-                                    "vocablo" : "cianogeno",
+                                    "vocablo" : "CIANOGENO",
                                     "descripcion" : "Gas compuesto de azone y carbono"
                                 },
                                 {
                                     "id": 3,
-                                    "vocablo" : "ciatica",
+                                    "vocablo" : "CIATICA",
                                     "descripcion" : "Neuralgia del nervio ciatico"
                                 },
                                 {
                                     "id": 4,
-                                    "vocablo" : "cesped",
+                                    "vocablo" : "CESPED",
                                     "descripcion" : "Cubre los limpios parques"
                                 },
                                 {
                                     "id": 5,
-                                    "vocablo" : "cesto",
+                                    "vocablo" : "CESTO",
                                     "descripcion" : "Recipiente a modo de red"
                                 },
                                 {
                                     "id": 6,
-                                    "vocablo" : "ciar",
+                                    "vocablo" : "CIAR",
                                     "descripcion" : "Remar hacia atrás"
                                 }
                             ]`;
@@ -71,12 +71,24 @@
                 npalabras++;
             });
 
+            $("#correcto").hide()
+
             $('.letras').children().on( "click", function() {
                 SeleccionarCelda(this.id)
             });
 
             $("button").click(function() {
-                Corre
+                var fallo = false
+                listaletras.forEach(letra => {
+                    if (($(".letra"+listaletras.indexOf(letra)).text().split("")[0] == letra) || letra == false ) {
+                        $(".letra"+listaletras.indexOf(letra)).css("background-color", "lightgreen")
+                    } else {
+                        fallo = true;
+                    }
+                });
+                if (!fallo) {
+                    $("#correcto").show()
+                }
             });
                 
         });
@@ -178,6 +190,7 @@
     </script>
 </head>
 <body>
+    <h2 id="correcto">Has acertado todas las palabras</h2>
     <div class="contenedor">
     </div>
     <button>Corregir</button>
