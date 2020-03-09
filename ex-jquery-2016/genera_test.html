@@ -6,11 +6,14 @@
     <title>Generador de examenes tipo test</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        var debug = true
+
+        var debug = false
+
         $(document).ready(function() {
             $("#footer").hide();
             CargarPreguntas();
         });
+
         function CargarPreguntas() {
             $.getJSON("test.json", {nocache: Math.random()}, function(respuesta)
             {
