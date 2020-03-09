@@ -80,13 +80,19 @@
         var flipped = [];
         var flipped1 = '';
         var flipped2 = '';
+
         $(document).ready(function () {
+
+            $("#completado").hide();
+
+            // Aquí se generan los iconos utilizados
             emojis = []
             for (let i = 127813; i < 127859; i++) {
                 emojis.push(i);
             }
             emojis = shuffle(emojis);
 
+            // Resetea los valores, vacia la pantalla y genera las cartas a usar
             $("#empezar").click(function () {
                 ncartas = $("#num").val();
                 cartas = [];
@@ -99,12 +105,15 @@
                     cartas.push(emojis[i]);
                 }
                 PresentaCartas(shuffle(cartas))
+                $("#completado").hide();
             })
+        });
 
-            function PresentaCartas(taco) {
-                var i = 1;
-                taco.forEach(carta => {
-                    $("#mesa").append(`
+        // Función que presenta las cartas en la pantallas
+        function PresentaCartas(taco) {
+            var i = 1;
+            taco.forEach(carta => {
+                $("#mesa").append(`
                     <section class="container">
                         <div id="${i}" class="card" onclick="flip(${i})">
                             <div class="front"></div>
@@ -112,33 +121,36 @@
                         </div>
                     </section>
                     `),
-                        i++;
-                });
-            }
-        });
+                    i++;
+            });
+        }
 
         function flip(carta) {
+            // Comprueba que la carta seleccionada sea válida
             if (flipped.includes(carta) || carta == flipped1 || carta == flipped2) {
                 return;
             }
+            // Primera carta descubierta
             if (!flipped1) {
                 flipped1 = carta;
                 $('#' + flipped1).toggleClass('flipped');
             } else {
+                // Segunda carta descubierta
                 if (!flipped2) {
                     flipped2 = carta;
-                    $('#' + flipped2).toggleClass('flipped'); 
-                    if (flipped.length >= cartas.length-2) {
+                    $('#' + flipped2).toggleClass('flipped');
+                    // Comprueba si ambas cartas son iguales
+                    if (flipped.length >= cartas.length - 2) {
                         HasGanado();
                     }
                 } else {
                     if ($('#' + flipped1).children('.back').text() == $('#' + flipped2).children('.back').text()) {
                         flipped.push(flipped1);
                         flipped.push(flipped2);
-                        
-                    }else {
+                    } else {
                         $('#' + flipped1).toggleClass('flipped');
                         $('#' + flipped2).toggleClass('flipped');
+
                     }
                     flipped1 = 0;
                     flipped2 = 0;
@@ -147,12 +159,12 @@
             }
         }
 
-            function HasGanado() {
-                console.log("Has ganado")
-            };
+        // Muestra el mensaje al ganador
+        function HasGanado() {
+            $("#completado").show()
+        };
 
-        
-
+        // Función que mezcla arrays
         function shuffle(array) {
             var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -175,8 +187,11 @@
 <body>
     <header>
         <h1>Encuentra las parejas</h1>
-        <p>¿Con cuántas parejas de cartas quieres jugar? <input type="number" name="num" id="num" min="3" value="10"
-                required><button id="empezar">Generar</button></p>
+        <p>
+            <span id="completado">¡HAS ENCONTRADO TODAS LAS CARTAS! ¿Quieres volver a intentarlo? </span>
+            ¿Con cuántas parejas de cartas quieres jugar? <input type="number" name="num" id="num" min="3" value="10"
+                required><button id="empezar">Generar</button>
+        </p>
     </header>
     <div id="mesa" class="mesa">
 

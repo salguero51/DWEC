@@ -5,16 +5,181 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logogrifo</title>
     <style>
-        
+    table {
+        width: 100%;
+        text-align: center;
+        width: auto;
+    }
+
+    table td {
+        font-size: 1em;
+        width: 35px;
+        height: 15px;
+    }
+
+    .letras td {
+        border: 1px solid black;
+        font-size: 1.2em;
+        height: 35px;
+    }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
+        var jsonpalabras  = `[
+                                {
+                                    "id": 1,
+                                    "vocablo" : "curiosidad",
+                                    "descripcion" : "Cualidad creativa, base del progreso personal"
+                                },
+                                {
+                                    "id": 2,
+                                    "vocablo" : "cianogeno",
+                                    "descripcion" : "Gas compuesto de azone y carbono"
+                                },
+                                {
+                                    "id": 3,
+                                    "vocablo" : "ciatica",
+                                    "descripcion" : "Neuralgia del nervio ciatico"
+                                },
+                                {
+                                    "id": 4,
+                                    "vocablo" : "cesped",
+                                    "descripcion" : "Cubre los limpios parques"
+                                },
+                                {
+                                    "id": 5,
+                                    "vocablo" : "cesto",
+                                    "descripcion" : "Recipiente a modo de red"
+                                },
+                                {
+                                    "id": 6,
+                                    "vocablo" : "ciar",
+                                    "descripcion" : "Remar hacia atrás"
+                                }
+                            ]`;
 
+        var listapalabras = JSON.parse(jsonpalabras);
+        var listaletras = [false];
+        var selcelda = false;
+        var selletra = false;
+        var npalabras = 0;
+
+        $(document).ready(function () {
+            LocalizarLetras();
+            listapalabras.forEach(palabra => {
+                PresentaPalabra(palabra);
+                npalabras++;
+            });
+
+            $('.letras').children().on( "click", function() {
+                SeleccionarCelda(this.id)
+            });
+
+            $("button").click(function() {
+                Corre
+            });
+                
+        });
+
+        $(document).keydown(function(event){
+            // Letras A-Z mayúsculas
+            if (event.which >= 65 && event.which <= 90) {
+                RellenarCelda(String.fromCharCode(event.which))
+            }
+            // Letras a-z minúsculas
+            if (event.which >= 97 && event.which <= 122) { 
+                RellenarCelda(String.fromCharCode(event.which-32))
+            }
+            // Eñes mayúsculas y minúsculas
+            if ( event.which == 241 || event.which == 209) {
+                RellenarCelda('Ñ')
+            }
+            // Vaciar celda
+            if ( event.which == 32 || event.which == 46) {
+                RellenarCelda('')
+                event.preventDefault();
+            }
+            // Izquierda
+            if (event.which == 37) {
+                MoverCursor(true, -1)
+                event.preventDefault();
+            }
+            // Arriba
+            if (event.which == 38) {
+                MoverCursor(false, -1)
+                event.preventDefault();
+            }
+            // Derecha
+            if (event.which == 39) {
+                MoverCursor(true, 1)
+                event.preventDefault();
+            }
+            // Abajo
+            if (event.which == 40) {
+                MoverCursor(false, 1)
+                event.preventDefault();
+            }
+        }); 
+
+        function MoverCursor(horizontal, x) {
+            if (!selcelda) {
+                return false;
+            }
+            var row = selcelda.split("-")[0]
+            var cel = selcelda.split("-")[1]
+            if (horizontal) {
+                if ((+cel+x >= 0) && (+cel+x <= listapalabras[row-1].vocablo.length-1)) {
+                    SeleccionarCelda(row+"-"+(+cel+x))
+                }
+            } else {
+                if ((+row+x >= 1) && (+row+x <= listapalabras.length)) {
+                    SeleccionarCelda((+row+x)+"-0")
+                }
+            }
+        }
+        
+        function LocalizarLetras(){
+            listapalabras.forEach(palabra => {                
+                palabra.vocablo.split("").forEach(letra => {
+                    if (!listaletras.includes(letra)) {
+                        listaletras.push(letra)
+                    }
+                });
+            });
+        }
+
+        function PresentaPalabra(palabra){
+            var posiciones = "";
+            var letras = ""
+            var i = 0;
+            palabra.vocablo.split("").forEach(letra => {
+                posiciones += `<td>${listaletras.indexOf(letra)}</td>`;
+                letras += `<td id="${palabra.id}-${i}" class="letra${listaletras.indexOf(letra)}"></td>`;
+                i++;
+            });
+            $(".contenedor").append(`<table><thead>${posiciones}</thead><tr class="letras">${letras}</tr></table><p>${palabra.descripcion}</p>`);
+        }
+
+        function SeleccionarCelda(id){
+            $("#"+selcelda).css("background-color", "")
+            console.log(id)
+            selcelda = id;
+            selletra = $("#"+id).attr("class");                
+            $("#"+id).css("background-color", "lightcyan")
+        }
+
+        function RellenarCelda(tecla) {
+            if (selcelda) {
+               $("."+selletra).text(tecla)
+            }
+        }
+
+        
     </script>
 </head>
 <body>
     <div class="contenedor">
-
     </div>
+    <button>Corregir</button>
 </body>
 </html>
